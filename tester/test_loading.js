@@ -8,16 +8,19 @@ export const options = {
             executor: 'per-vu-iterations',
             vus: server.VUs, // number of threads
             iterations: server.PerVUsIter,
-            maxDuration: '30s',
+            maxDuration: '60s',
         },
     },
 };
 
 
-const data = { "location": "l1", "timestamp": "2023-01-01T00:00:00.000+08:00", "data": { "a": 1, "b": 1, "c": 1, "d": 1 } }
+let data = { "location": "", "timestamp": server.ts + "T00:00:00.000+08:00", "data": { "a": 1, "b": 1, "c": 1, "d": 1 } }
+let cnt = 1;
 
 export default function () {
-    const res = http.post(`http://${server.host}:${server.port}/${server.send_endpoint}`, data, server.param)
+    data.location = 'l' + cnt++
+    // const res = http.post(`https://www.google.com.tw/`, JSON.stringify(data), server.param)
+    const res = http.post(`http://${server.host}:${server.port}/api/order`, JSON.stringify(data), server.param)
     check(res, {
         'status is 200': (r) => r.status === 200,
     });
